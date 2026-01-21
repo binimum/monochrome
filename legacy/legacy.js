@@ -277,21 +277,15 @@ $(document).ready(function () {
                 };
 
                 if (playPromise !== undefined) {
-                    playPromise
-                        .then(function() {
-                            // Promise resolved doesn't always mean playing started (buffering)
-                            // But usually it means intent is accepted.
-                            // We keep timer running until 'onplaying' checks in? 
-                            // Actually promise resolve just means "accepted". 
-                            // Chrome 15 won't have promise.
-                            // Modern browsers: resolve -> wait for data -> playing.
-                            // If data hangs, promise resolved but playing never fires.
-                            // So we keep timer.
-                        })
-                        ["catch"](function(e) {
-                            console.log("Native Play Promise Rejected: " + e.name);
-                            triggerRetryOrLegacy("promise rejection: " + e.name);
-                        });
+                    var p = playPromise.then(function() {
+                        // Promise resolved
+                    });
+                    
+                    // Explicitly use bracket notation on the variable to avoid parser confusion
+                    p["catch"](function(e) {
+                         console.log("Native Play Promise Rejected: " + e.name);
+                         triggerRetryOrLegacy("promise rejection: " + e.name);
+                    });
                 } else {
                     // Legacy browser (no promise)
                     // Wait for onplaying or timeout
