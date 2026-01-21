@@ -288,7 +288,7 @@ $(document).ready(function () {
                             // If data hangs, promise resolved but playing never fires.
                             // So we keep timer.
                         })
-                        .catch(function(e) {
+                        ["catch"](function(e) {
                             console.log("Native Play Promise Rejected: " + e.name);
                             triggerRetryOrLegacy("promise rejection: " + e.name);
                         });
